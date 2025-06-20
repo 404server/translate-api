@@ -1,3 +1,5 @@
+import traceback
+
 from fastapi import FastAPI, Request
 from pydantic import BaseModel
 import uvicorn
@@ -8,18 +10,23 @@ from deep_translator import GoogleTranslator
 from deep_translator import MyMemoryTranslator
 from translate import Translator
 import translators as ts
+
 app = FastAPI()
 
+
 class TranslateRequest(BaseModel):
+    source: str
     text: str
-    dest: str = 'kk'
+    dest: str
+
 
 count = 1
 translatorG = googleTranslator()
 
-text = "新款防走光运动短裤女假两件速干透气跑步瑜伽健身短裤休闲裤夏季"
 
-translatedGoogle = GoogleTranslator(source='zh-CN', target='kk')
+# text = "新款防走光运动短裤女假两件速干透气跑步瑜伽健身短裤休闲裤夏季"
+
+# translatedGoogle = GoogleTranslator(source='zh-CN', target='kk')
 # print("Google " + translatedGoogle)
 #
 # translatedMyMemory = MyMemoryTranslator(source='zh-CN', target='kk-KZ').translate(text)
@@ -35,15 +42,18 @@ translatedGoogle = GoogleTranslator(source='zh-CN', target='kk')
 # print("Yandex " + ts.translate_text(text, translator="yandex", from_language="zh",to_language="ru"))
 # print("translateCom " + ts.translate_text(text, translator="translateCom",to_language="ru"))
 # print("sysTran " + ts.translate_text(text, translator="sysTran",from_language="en", to_language="kk"))
-print("lingvanex " + ts.translate_text(text, translator="lingvanex",from_language="zh-Hans_CN", to_language="kk_KZ"))
-
-
+# print("lingvanex " + ts.translate_text(text, translator="lingvanex",from_language="zh-Hans_CN", to_language="kk_KZ"))
 
 
 @app.post('/translate')
 async def translate(request: TranslateRequest):
     global count
-    result = ts.translate_text(request.text, translator="lingvanex",from_language="zh-Hans_CN", to_language="kk_KZ")
+    result = ts.translate_text(
+        request.text,
+        translator="lingvanex",
+        from_language=request.source,
+        to_language=request.dest
+    )
     print(f"{result} {count}")
     count += 1
     return {"translated": result}
