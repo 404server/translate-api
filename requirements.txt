@@ -1,0 +1,11 @@
+# requirements.txt
+# Все зависимости для запуска FastAPI-приложения
+# Установите их командой: pip install -r requirements.txt
+fastapi
+uvicorn
+pydantic
+requests
+googletrans==4.0.0rc1
+deep-translator
+translate
+translators
