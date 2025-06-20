@@ -46,4 +46,4 @@ async def translate(request: TranslateRequest):
     result = ts.translate_text(request.text, translator="lingvanex",from_language="zh-Hans_CN", to_language="kk_KZ")
     print(f"{result} {count}")
     count += 1
-    return {"translated": result, "count": count}
+    return {"translated": result}
